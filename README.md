@@ -1,2 +1,2 @@
-# Auto-AWD
-CTF AWD framework
+<h1 align="center">Auto AWD</h1>
+
