@@ -8,10 +8,42 @@ import pytest
 
 from core.config import AppConfig
 
+YAML = """
+time:
+  start: '8:00'
+  end: '23:00'
+  interval: 5
+platform:
+  url: http://127.0.0.1:8000/submit
+  curl: curl http://127.0.0.1:8000/submit?flag={flag}&token=fc067281e151a0b929f5056f22298490
+team:
+  ips: 172.18.0.1~10
+#  include: 172.18.0.64
+#  exclude: 172.18.0.4
+attack:
+  regx: \w{32}
+#  dir: %s
+#  thread: 8
+challenge:
+  8080: web
+  9099: pwn"""
+
+GOOD_PAYLOAD = """
+import uuid
+
+
+class Payload(object):
+    port = 8080
+    once = True
+
+    @staticmethod
+    def run(ip):
+        return 'flag is here: ' + uuid.uuid4().hex
+"""
+
 
 @pytest.fixture()
 def config(tmpdir):
     c = tmpdir.join('config.yml')
-    with open('config.template.yml') as f:
-        c.write(f.read().format(dir=tmpdir,flag='{flag}'))
+    c.write(YAML % tmpdir)
     return AppConfig(c)
