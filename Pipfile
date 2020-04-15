@@ -8,6 +8,10 @@ verify_ssl = true
 [packages]
 pyyaml = "*"
 pytest = "*"
+requests = "*"
+loguru = "*"
+colorama = "*"
+watchdog = "*"
 
 [requires]
 python_version = "3.8"

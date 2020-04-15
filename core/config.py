@@ -57,17 +57,12 @@ class TimeParser(BaseParser):
 class PlatformParser(BaseParser):
     def __init__(self, data):
         super(PlatformParser, self).__init__(data)
-        self.curl: str = data.get('curl')
-        if self.curl and '{flag}' not in self.curl:
-            raise ConfigSyntaxError("flag.curl missing formatter: {flag}")
-
-        self.url: str = data.get('url')
-        if self.url and not self.url.startswith(('http://', 'https://')):
-            raise ConfigSyntaxError("flag.url should start with 'http://' or 'https://'")
-        self.method = data.get('method', 'get').upper()
-        self.key = data.get('key')
-        self.param: dict = data.get('param')
-        self.json: bool = data.get('json', False)
+        self.url: str = data['url']
+        if not self.url.startswith(('http://', 'https://')):
+            raise ConfigSyntaxError("platform.url should start with 'http://' or 'https://'")
+        self.curl: str = data['curl']
+        if '{flag}' not in self.curl:
+            raise ConfigSyntaxError("platform.curl missing formatter: {flag}")
 
         self.timeout: int = data.get('timeout', 3)
         self.success_text = data.get('success_text', '')
@@ -92,6 +87,7 @@ class AttackParser(BaseParser):
         if not os.path.exists(self.dir):
             raise ConfigFileError(f'payload dir:{self.dir} not find')
         self.thread: int = data.get('thread', 8)
+        self.regx = data['regx']
 
 
 class ChallengeParser(BaseParser):
@@ -109,7 +105,7 @@ class ChallengeParser(BaseParser):
         return len(self._challenges)
 
     def get(self, port: int):
-        return self._challenges.get(port)
+        return self._challenges.get(port, 'default')
 
 
 class PluginParser(BaseParser):
