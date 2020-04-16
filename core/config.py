@@ -53,6 +53,16 @@ class TimeParser(BaseParser):
             h, m = map(lambda x: int(x), self.start.split(':'))
             return ((localtime.tm_hour - h) * 60 + (localtime.tm_min - m)) // self.interval
 
+    @property
+    def next_round_time(self):
+        r = self.round
+        if r <= 0:
+            return self.end
+
+        seconds = ((r + 1) * self.interval) * 60
+        start = time.mktime(time.strptime(self.start, '%H:%M'))
+        return time.strftime('%H:%M', time.localtime(start + seconds))
+
 
 class PlatformParser(BaseParser):
     def __init__(self, data):

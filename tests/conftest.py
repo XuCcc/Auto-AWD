@@ -7,6 +7,7 @@
 import pytest
 
 from core.config import AppConfig
+from core.const import PayloadData
 
 YAML = """
 time:
@@ -22,7 +23,7 @@ team:
 #  exclude: 172.18.0.4
 attack:
   regx: \w{32}
-#  dir: %s
+  dir: %s
 #  thread: 8
 challenge:
   8080: web
@@ -47,3 +48,11 @@ def config(tmpdir):
     c = tmpdir.join('config.yml')
     c.write(YAML % tmpdir)
     return AppConfig(c)
+
+
+@pytest.fixture()
+def payload(tmpdir, config):
+    PayloadData.load_config(config.challenge)
+    p = tmpdir.join('good.py')
+    p.write(GOOD_PAYLOAD)
+    return PayloadData.load(p)

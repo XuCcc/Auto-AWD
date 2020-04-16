@@ -19,3 +19,7 @@ class ConfigFileError(AwdError):
 
 class ServiceInitError(AwdError):
     pass
+
+
+class PayloadTempError(AwdError):
+    pass
