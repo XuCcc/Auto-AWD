@@ -12,6 +12,7 @@ requests = "*"
 loguru = "*"
 colorama = "*"
 watchdog = "*"
+pony = "*"
 
 [requires]
 python_version = "3.8"

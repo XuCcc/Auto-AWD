@@ -1,3 +1,4 @@
+#db: awd.db
 time:
   start: '8:00'
   end: '23:00'
