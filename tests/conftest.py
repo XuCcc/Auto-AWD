@@ -10,6 +10,7 @@ from core.config import AppConfig
 from core.const import PayloadData
 
 YAML = """
+# db: awd.db
 time:
   start: '8:00'
   end: '23:00'
@@ -31,6 +32,8 @@ challenge:
 
 GOOD_PAYLOAD = """
 import uuid
+import random
+import time
 
 
 class Payload(object):
@@ -39,6 +42,7 @@ class Payload(object):
 
     @staticmethod
     def run(ip):
+        time.sleep(random.randint(1, 3))
         return 'flag is here: ' + uuid.uuid4().hex
 """
 

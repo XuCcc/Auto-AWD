@@ -31,6 +31,7 @@ class BaseParser(object):
 class TimeParser(BaseParser):
     def __init__(self, data):
         super(TimeParser, self).__init__(data)
+        self.date = time.strftime('%Y-%m-%d', time.localtime())
         self.start = TimeParser.format_time(data.get('start', '00:00'))
         self.end = TimeParser.format_time(data.get('end', '23:59'))
         self.interval: int = data['interval']
@@ -60,7 +61,7 @@ class TimeParser(BaseParser):
             return self.end
 
         seconds = ((r + 1) * self.interval) * 60
-        start = time.mktime(time.strptime(self.start, '%H:%M'))
+        start = time.mktime(time.strptime(f'{self.date} {self.start}', '%Y-%m-%d %H:%M'))
         return time.strftime('%H:%M', time.localtime(start + seconds))
 
 
@@ -131,6 +132,7 @@ class AppConfig(BaseParser):
         with open(config, 'r') as f:
             super(AppConfig, self).__init__(yaml.safe_load(f.read()))
 
+        self.db = self.data.get('db', 'awd.db')
         self.time = TimeParser(self.data.get('time'))
         self.platform = PlatformParser(self.data.get('platform'))
         self.team = TeamParser(self.data.get('team'))
