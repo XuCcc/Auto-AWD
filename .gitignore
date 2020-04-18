@@ -133,3 +133,5 @@ payloads/*.py
 
 # idea
 .idea
+
+Pipfile.lock
