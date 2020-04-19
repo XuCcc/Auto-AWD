@@ -10,6 +10,8 @@ from core.piper.basePiper import Piper
 
 
 class DbPiper(Piper):
+    name = 'databasePiper'
+
     def process(self, item: ItemStream):
         with db_session:
             if item.has_func():

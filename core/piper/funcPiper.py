@@ -14,6 +14,8 @@ from core.piper.basePiper import Piper
 
 
 class FuncHandler(Piper):
+    name = 'funcPiper'
+
     def __init__(self, config: AttackParser):
         self._config = config
         self.regx = re.compile(config.regx)

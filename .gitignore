@@ -135,3 +135,7 @@ payloads/*.py
 .idea
 
 Pipfile.lock
+
+# db
+*.db
+*.db-journal

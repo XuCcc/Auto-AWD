@@ -29,7 +29,7 @@ class PayloadData(object):
         self.subject = self.config.get(self.port)
 
     @classmethod
-    def load_config(cls, config: ChallengeParser):
+    def load_challenge_mapping(cls, config: ChallengeParser):
         cls.config = config
 
     @staticmethod

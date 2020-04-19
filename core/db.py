@@ -7,6 +7,9 @@
 import os
 from pony.orm import *
 
+from core import ROOT_PATH
+from core.log import Log
+
 db = Database()
 
 
@@ -30,9 +33,12 @@ class FlagInfo(db.Entity):
 
 
 def init_database(path):
+    dbPath = os.path.join(ROOT_PATH, path)
     if os.path.exists(path):
-        db.bind(provider='sqlite', filename=path)
+        db.bind(provider='sqlite', filename=dbPath)
         db.generate_mapping()
+        Log.app.success('load database: ' + dbPath)
     else:
-        db.bind(provider='sqlite', filename=path, create_db=True)
+        db.bind(provider='sqlite', filename=dbPath, create_db=True)
         db.generate_mapping(create_tables=True)
+        Log.app.info('create database: ' + dbPath)

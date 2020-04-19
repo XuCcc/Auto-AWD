@@ -10,14 +10,14 @@ from unittest.mock import MagicMock
 from core.item import ItemStream
 from core.const import Status
 from core.pipeline import Pipeline
-from core.piper import FlagPiper
+from core.piper import FlagPiper, DbPiper
 
 
 @pytest.fixture()
 def pipeline(config):
     p = Pipeline(config)
     p.build()
-    p.pipers.pop()
+    p.pipers.pop(DbPiper.name)
     return p
 
 

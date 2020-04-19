@@ -13,6 +13,8 @@ from core.piper.basePiper import Piper
 
 
 class LogPiper(Piper):
+    name = 'logPiper'
+
     def __init__(self, config: ChallengeParser):
         self._config = config
         self._log = Log.app

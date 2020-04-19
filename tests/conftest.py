@@ -56,7 +56,7 @@ def config(tmpdir):
 
 @pytest.fixture()
 def payload(tmpdir, config):
-    PayloadData.load_config(config.challenge)
+    PayloadData.load_challenge_mapping(config.challenge)
     p = tmpdir.join('good.py')
     p.write(GOOD_PAYLOAD)
     return PayloadData.load(p)

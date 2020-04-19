@@ -12,7 +12,8 @@ class Log(object):
     app = logger.bind(name='app')
     plugin = logger.bind(name='plugin')
 
-    def __init__(self, debug: bool = False):
+    @classmethod
+    def config(cls, debug):
         level = 'DEBUG' if debug else 'INFO'
         logger.remove(0)
         logger.add(sys.stdout,

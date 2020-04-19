@@ -9,6 +9,8 @@ from core.item import ItemStream
 
 
 class Piper(object):
+    name = 'basePiper'
+
     @abc.abstractmethod
     def process(self, item: ItemStream):
         pass

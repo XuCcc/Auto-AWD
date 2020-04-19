@@ -73,7 +73,7 @@ class PlatformParser(BaseParser):
             raise ConfigSyntaxError("platform.url should start with 'http://' or 'https://'")
         self.curl: str = data['curl']
         if '{flag}' not in self.curl:
-            raise ConfigSyntaxError("platform.curl missing formatter: {flag}")
+            raise ConfigSyntaxError("[platform.curl] missing formatter: {flag}")
 
         self.timeout: int = data.get('timeout', 3)
         self.success_text = data.get('success_text', '')

@@ -14,6 +14,8 @@ from core.config import PlatformParser
 
 
 class FlagPiper(Piper):
+    name = 'flagPiper'
+
     def __init__(self, config: PlatformParser):
         self._config = config
 
