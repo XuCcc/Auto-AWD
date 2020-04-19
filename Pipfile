@@ -13,6 +13,8 @@ loguru = "*"
 colorama = "*"
 watchdog = "*"
 pony = "*"
+schedule = "*"
+click = "*"
 
 [requires]
 python_version = "3.8"

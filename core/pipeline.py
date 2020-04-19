@@ -15,9 +15,10 @@ from core.piper import *
 
 
 class Pipeline(object):
+    name = 'PipelineListener'
     queue = queue.Queue()
-    pipers: Dict[str, Piper] = {}
-    tasks: List[Future] = []
+    _pipers: Dict[str, Piper] = {}
+    _tasks: List[Future] = []
 
     def __init__(self, config: AppConfig):
         self.ips = config.team.ips
@@ -39,14 +40,14 @@ class Pipeline(object):
 
     @classmethod
     def add(cls, piper: Piper):
-        cls.pipers.update({
+        cls._pipers.update({
             piper.name: piper
         })
         return cls
 
     @classmethod
     def get(cls, name):
-        return cls.pipers.get(name)
+        return cls._pipers.get(name)
 
     @classmethod
     def send(cls, item: ItemStream):
@@ -54,12 +55,12 @@ class Pipeline(object):
 
     @classmethod
     def clear(cls):
-        cls.tasks.clear()
+        cls._tasks.clear()
         while not cls.queue.empty():
             cls.queue.get_nowait()
 
     def do(self, item: ItemStream) -> ItemStream:
-        for piper in self.pipers.values():
+        for piper in self._pipers.values():
             piper.process(item)
         return item
 
@@ -67,13 +68,17 @@ class Pipeline(object):
         while True:
             item: ItemStream = self.queue.get()
             f = self._pool.submit(self.do, item)
-            self.tasks.append(f)
+            self._tasks.append(f)
 
     def start(self):
         thread = Thread(
             target=self.run,
-            name='PipelineListener',
+            name=self.name,
             daemon=True
         )
         thread.start()
-        return thread
+
+    @property
+    def progress(self):
+        done = [i for i in self._tasks if i.done()]
+        return len(done), len(self._tasks)

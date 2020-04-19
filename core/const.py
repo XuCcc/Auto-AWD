@@ -39,3 +39,6 @@ class PayloadData(object):
         payload = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(payload)
         return PayloadData(filename, payload.Payload)
+
+    def __str__(self):
+        return f'{self.name}@{self.subject}:{self.port}'
