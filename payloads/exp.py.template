@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Time    : 2020/04/19 16:53
+# @Author  : Xu
+# @Site    : https://xuccc.github.io/
+
+import uuid
+import random
+import time
+
+
+class Payload(object):
+    port = 8080
+    once = True
+
+    @staticmethod
+    def run(ip):
+        time.sleep(random.randint(1, 3))
+        return 'attack is success: find flag' + uuid.uuid4().hex
