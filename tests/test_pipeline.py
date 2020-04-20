@@ -17,7 +17,7 @@ from core.piper import FlagPiper, DbPiper
 def pipeline(config):
     p = Pipeline(config)
     p.build()
-    p._pipers.pop(DbPiper.name)
+    p.delete(DbPiper.name)
     return p
 
 

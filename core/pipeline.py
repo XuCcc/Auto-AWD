@@ -21,8 +21,8 @@ class Pipeline(object):
     _tasks: List[Future] = []
 
     def __init__(self, config: AppConfig):
-        self.ips = config.team.ips
-        self.challenges = config.challenge
+        self.ips = config.challenges.ips
+        self.challenges = config.challenges
 
         self._config = config
         self._pool = ThreadPoolExecutor(config.attack.thread)
@@ -33,7 +33,7 @@ class Pipeline(object):
         ).add(
             FlagPiper(self._config.platform)
         ).add(
-            LogPiper(self._config.challenge)
+            LogPiper()
         ).add(
             DbPiper()
         )
@@ -44,6 +44,10 @@ class Pipeline(object):
             piper.name: piper
         })
         return cls
+
+    @classmethod
+    def delete(cls, name):
+        cls._pipers.pop(name)
 
     @classmethod
     def get(cls, name):

@@ -6,7 +6,6 @@
 
 from colorama import Fore
 
-from core.config import ChallengeParser
 from core.log import Log
 from core.item import ItemStream
 from core.piper.basePiper import Piper
@@ -15,17 +14,16 @@ from core.piper.basePiper import Piper
 class LogPiper(Piper):
     name = 'logPiper'
 
-    def __init__(self, config: ChallengeParser):
-        self._config = config
+    def __init__(self):
         self._log = Log.app
 
     def process(self, item: ItemStream):
         msg = ''
         if (item.payload is not None) & hasattr(item, 'func'):
             if item.func.status:
-                msg = f'{item.payload.name}@{item.ip}:{item.payload.port}({item.payload.subject}) run {Fore.GREEN}success, {Fore.RESET}'
+                msg = f'{item.payload.name}@{item.ip}:{item.payload.port} run {Fore.GREEN}success, {Fore.RESET}'
             else:
-                msg = f'{item.payload.name}@{item.ip}:{item.payload.port}({item.payload.subject}) run {Fore.RED}fail, {Fore.RESET}'
+                msg = f'{item.payload.name}@{item.ip}:{item.payload.port} run {Fore.RED}fail, {Fore.RESET}'
 
         if hasattr(item, 'flag'):
             if item.flag.status:

@@ -4,7 +4,7 @@
 # @Author  : Xu
 # @Site    : https://xuccc.github.io/
 
-from typing import List
+from typing import List, Dict
 import yaml
 import re
 import os
@@ -79,16 +79,41 @@ class PlatformParser(BaseParser):
         self.success_text = data.get('success_text', '')
 
 
-class TeamParser(BaseParser):
+class ChallengeParser(BaseParser):
     def __init__(self, data):
-        super(TeamParser, self).__init__(data)
-        self.ips = ParserUtil.ip(data['ips'], data.get('include', ''), data.get('exclude', ''))
+        super(ChallengeParser, self).__init__(data)
+        self.raw: Dict[str, str] = data.get('raw')
+
+        if not self.raw:
+            self.ips = ParserUtil.ip(data['ips'], data.get('include', ''), data.get('exclude', ''))
+            self.ports = data['port']
+            self.challenges: Dict[str, List[int]] = self.parse_ip_port()
+        else:
+            self.challenges = self.parse_raw()
+            self.ips = list(self.challenges.keys())
+            ports = set()
+            for ps in self.challenges.values():
+                for p in ps:
+                    ports.add(p)
+            self.ports = list(ports)
+
+    def parse_raw(self):
+        mapping = {}
+        for ip in self.raw.keys():
+            if isinstance(self.raw.get(ip), str):
+                mapping[ip] = [int(port) for port in self.raw.get(ip).split(',')]
+            elif isinstance(self.raw.get(ip), int):
+                mapping[ip] = [self.raw.get(ip)]
+        return mapping
+
+    def parse_ip_port(self):
+        mapping = {}
+        for ip in self.ips:
+            mapping[ip] = self.ports
+        return mapping
 
     def __iter__(self):
-        return iter(self.ips)
-
-    def __len__(self):
-        return len(self.ips)
+        return iter(self.challenges.items())
 
 
 class AttackParser(BaseParser):
@@ -99,24 +124,6 @@ class AttackParser(BaseParser):
             raise ConfigFileError(f'payload dir:{self.dir} not find')
         self.thread: int = data.get('thread', 8)
         self.regx = data['regx']
-
-
-class ChallengeParser(BaseParser):
-    def __init__(self, data):
-        super(ChallengeParser, self).__init__(data)
-        self._challenges = data or {0: 'default'}
-
-    def __iter__(self):
-        return iter(self._challenges.items())
-
-    def __contains__(self, item):
-        return item in self._challenges
-
-    def __len__(self):
-        return len(self._challenges)
-
-    def get(self, port: int):
-        return self._challenges.get(port, 'default')
 
 
 class PluginParser(BaseParser):
@@ -135,7 +142,6 @@ class AppConfig(BaseParser):
         self.db = self.data.get('db', 'awd.db')
         self.time = TimeParser(self.data.get('time'))
         self.platform = PlatformParser(self.data.get('platform'))
-        self.team = TeamParser(self.data.get('team'))
-        self.challenge = ChallengeParser(self.data.get('challenge', {}))
+        self.challenges = ChallengeParser(self.data.get('challenge'))
         self.plugins = PluginParser(self.data.get('plugin', {}))
         self.attack = AttackParser(self.data.get('attack', {}))

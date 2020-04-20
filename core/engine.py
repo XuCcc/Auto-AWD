@@ -44,7 +44,6 @@ class AwdEngine(object):
 
     def init(self):
         init_database(self._config.db)
-        PayloadData.load_challenge_mapping(self._config.challenge)
         self.pipeline.build()
 
         self.services.update({
@@ -83,8 +82,9 @@ class AwdEngine(object):
         while True:
             payload = self.pmonitor.get()
             r = self._config.time.round
-            for ip in self._config.team:
-                self.pipeline.send(ItemStream(r, ip, payload))
+            for ip, ports in self._config.challenges:
+                if payload.port in ports:
+                    self.pipeline.send(ItemStream(r, ip, payload))
 
     def run(self):
         try:
@@ -92,3 +92,10 @@ class AwdEngine(object):
         except KeyboardInterrupt:
             self._log.critical('exit')
             sys.exit(0)
+
+
+if __name__ == '__main__':
+    e = AwdEngine('/home/xu/Projects/Github/Auto-AWD/config.template.yml', True)
+    e.init()
+    e.start()
+    e.run()

@@ -17,18 +17,25 @@ time:
   interval: 5
 platform:
   url: http://127.0.0.1:8000/submit
-  curl: curl http://127.0.0.1:8000/submit?flag={flag}&token=fc067281e151a0b929f5056f22298490
-team:
-  ips: 172.18.0.1~10
-#  include: 172.18.0.64
-#  exclude: 172.18.0.4
+  curl: curl  http://127.0.0.1:8000/submit?flag={flag}&token=fc067281e151a0b929f5056f22298490
+#  timeout: 3
+#  success_text: ''
 attack:
   regx: \w{32}
   dir: %s
 #  thread: 8
 challenge:
-  8080: web
-  9099: pwn"""
+#  ips: 172.18.0.1~10
+#  include: 172.18.0.64
+#  exclude: 172.18.0.4
+#  port:
+#    - 8080
+#    - 9099
+  raw:
+    172.18.0.1: 8080,9099
+    172.18.0.2: 8080
+    172.18.0.3: 9099,8081
+"""
 
 GOOD_PAYLOAD = """
 import uuid
@@ -56,7 +63,6 @@ def config(tmpdir):
 
 @pytest.fixture()
 def payload(tmpdir, config):
-    PayloadData.load_challenge_mapping(config.challenge)
     p = tmpdir.join('good.py')
     p.write(GOOD_PAYLOAD)
     return PayloadData.load(p)

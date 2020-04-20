@@ -8,9 +8,6 @@ import os
 import importlib.util
 from enum import IntEnum
 
-from core.config import ChallengeParser
-from core.exception import PayloadTempError
-
 
 class Status(IntEnum):
     SUCCESS = 1
@@ -26,12 +23,6 @@ class PayloadData(object):
         self.func = cls.run
         self.once = cls.once
 
-        self.subject = self.config.get(self.port)
-
-    @classmethod
-    def load_challenge_mapping(cls, config: ChallengeParser):
-        cls.config = config
-
     @staticmethod
     def load(path):
         filename = os.path.basename(path)
@@ -41,4 +32,4 @@ class PayloadData(object):
         return PayloadData(filename, payload.Payload)
 
     def __str__(self):
-        return f'{self.name}@{self.subject}:{self.port}'
+        return f'{self.name} {self.port}'
