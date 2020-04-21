@@ -5,6 +5,7 @@
 # @Site    : https://xuccc.github.io/
 
 import re
+import requests
 import traceback
 
 from core.config import AttackParser
@@ -32,7 +33,9 @@ class FuncHandler(Piper):
 
         try:
             msg = item.func.run(item.ip)
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
+            item.func.result = (Status.ERROR, str(e))
+        except Exception:
             item.func.result = (Status.ERROR, traceback.format_exc())
         else:
             r, flag = self.find_flag(msg)

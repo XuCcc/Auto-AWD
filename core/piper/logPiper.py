@@ -23,7 +23,7 @@ class LogPiper(Piper):
             if item.func.status:
                 msg = f'{item.payload.name}@{item.ip}:{item.payload.port} run {Fore.GREEN}success, {Fore.RESET}'
             else:
-                msg = f'{item.payload.name}@{item.ip}:{item.payload.port} run {Fore.RED}fail, {Fore.RESET}'
+                msg = f'{item.payload.name}@{item.ip}:{item.payload.port} run {Fore.RED}fail, {Fore.RESET}{item.func.message}'
 
         if hasattr(item, 'flag'):
             if item.flag.status:

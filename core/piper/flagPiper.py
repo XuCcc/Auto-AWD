@@ -26,7 +26,7 @@ class FlagPiper(Piper):
         else:
             r, msg = self._parse_request_output(flag)
         if not r:
-            return r, msg
+            return False, msg
         return self._config.success_text in msg, msg
 
     def _parse_shell_output(self, cmd: str) -> (bool, str):
@@ -49,7 +49,6 @@ class FlagPiper(Piper):
             return False, traceback.format_exc()
         else:
             if not isinstance(rep, requests.Response):
-
                 return False, \
                        f"[platform.python] {self._config.data.get('python')} return value is not requests.Response"
             if rep.status_code != 200:
