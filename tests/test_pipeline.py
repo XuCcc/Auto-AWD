@@ -50,7 +50,7 @@ def test_item_process_bad_func(pipeline, payload):
 
 def test_item_process_good_func_submit_success(config, pipeline, payload):
     config.platform.success_text = 'submit ok'
-    FlagPiper._get_shell_result = MagicMock(return_value=(True, "{'result':'submit ok'}"))
+    FlagPiper._parse_shell_output = MagicMock(return_value=(True, "{'result':'submit ok'}"))
     item = pipeline.do(ItemStream(1, payload=payload))
     assert item.has_flag()
     assert item.flag.status

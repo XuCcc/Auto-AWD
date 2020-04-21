@@ -16,8 +16,8 @@ time:
   end: '23:00'
   interval: 5
 platform:
-  url: http://127.0.0.1:8000/submit
-  curl: curl  http://127.0.0.1:8000/submit?flag={flag}&token=fc067281e151a0b929f5056f22298490
+ curl: curl  http://127.0.0.1:8000/submit?flag={flag}&token=fc067281e151a0b929f5056f22298490
+  # python: submit.py
 #  timeout: 3
 #  success_text: ''
 attack:

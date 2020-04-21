@@ -4,12 +4,14 @@
 # @Author  : Xu
 # @Site    : https://xuccc.github.io/
 
-from typing import List, Dict
+import requests
+from typing import List, Dict, Callable
 import yaml
 import re
 import os
 import time
 
+from core.utils import loadPy
 from core.exception import ConfigSyntaxError, ConfigFileError
 
 
@@ -68,12 +70,22 @@ class TimeParser(BaseParser):
 class PlatformParser(BaseParser):
     def __init__(self, data):
         super(PlatformParser, self).__init__(data)
-        self.url: str = data['url']
-        if not self.url.startswith(('http://', 'https://')):
-            raise ConfigSyntaxError("platform.url should start with 'http://' or 'https://'")
-        self.curl: str = data['curl']
-        if '{flag}' not in self.curl:
-            raise ConfigSyntaxError("[platform.curl] missing formatter: {flag}")
+        self.isCurl = True
+        if 'curl' in data and 'python' in data:
+            raise ConfigSyntaxError('[platform.curl] or [platform.python] not both')
+
+        if 'curl' in data:
+            self.curl: str = data.get('curl')
+            if '{flag}' not in self.curl:
+                raise ConfigSyntaxError("[platform.curl] missing formatter: {flag}")
+        elif 'python' in data:
+            self.isCurl = False
+            try:
+                self.py: Callable[[str], requests.Response] = loadPy('awd.core.submit', data.get('python')).submit
+            except AttributeError:
+                raise ConfigFileError(f'[platform.python] miss function: submit(flag)')
+            except SyntaxError as e:
+                raise ConfigSyntaxError(f'[platform.python] file syntax error: {e}')
 
         self.timeout: int = data.get('timeout', 3)
         self.success_text = data.get('success_text', '')

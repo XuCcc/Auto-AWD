@@ -5,8 +5,9 @@
 # @Site    : https://xuccc.github.io/
 
 import os
-import importlib.util
 from enum import IntEnum
+
+from core.utils import loadPy
 
 
 class Status(IntEnum):
@@ -26,9 +27,7 @@ class PayloadData(object):
     @staticmethod
     def load(path):
         filename = os.path.basename(path)
-        spec = importlib.util.spec_from_file_location('awd.core.payload', path)
-        payload = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(payload)
+        payload = loadPy('awd.core.payload', path)
         return PayloadData(filename, payload.Payload)
 
     def __str__(self):

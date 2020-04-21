@@ -4,8 +4,9 @@
 # @Author  : Xu
 # @Site    : https://xuccc.github.io/
 
-
+import requests
 import subprocess
+import traceback
 
 from core.const import Status
 from core.item import ItemStream
@@ -20,12 +21,15 @@ class FlagPiper(Piper):
         self._config = config
 
     def submit_flag(self, flag) -> (bool, str):
-        r, msg = self._get_shell_result(self._config.curl.format(flag=flag))
+        if self._config.isCurl:
+            r, msg = self._parse_shell_output(self._config.curl.format(flag=flag))
+        else:
+            r, msg = self._parse_request_output(flag)
         if not r:
             return r, msg
         return self._config.success_text in msg, msg
 
-    def _get_shell_result(self, cmd: str) -> (bool, str):
+    def _parse_shell_output(self, cmd: str) -> (bool, str):
         with subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
             try:
                 exitcode = p.wait(self._config.timeout)
@@ -38,13 +42,27 @@ class FlagPiper(Piper):
                     return False, stderr.decode('utf-8')
                 return True, stdout.decode('utf-8')
 
+    def _parse_request_output(self, flag) -> (bool, str):
+        try:
+            rep: requests.Response = self._config.py(flag)
+        except:
+            return False, traceback.format_exc()
+        else:
+            if not isinstance(rep, requests.Response):
+
+                return False, \
+                       f"[platform.python] {self._config.data.get('python')} return value is not requests.Response"
+            if rep.status_code != 200:
+                return False, rep.reason
+            return True, rep.text
+
     def process(self, item: ItemStream):
         if not item.has_flag():
             return
 
         try:
             r, msg = self.submit_flag(item.flag.value)
-        except Exception as e:
-            item.flag.result = (Status.ERROR, e)
+        except:
+            item.flag.result = (Status.ERROR, traceback.format_exc())
         else:
             item.flag.result = (Status.FAIL, msg) if not r else (Status.SUCCESS, msg)

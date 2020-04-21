@@ -29,5 +29,5 @@ class LogPiper(Piper):
             if item.flag.status:
                 msg += f'submit success {Fore.GREEN}{item.flag.value}'
             else:
-                msg += f'submit fail {Fore.RED}{item.flag.value}'
+                msg += f'submit fail {Fore.RED}{item.flag.value}, {Fore.RESET}{item.flag.message}'
         self._log.info(msg)
