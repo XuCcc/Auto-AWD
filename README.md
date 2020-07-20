@@ -17,6 +17,10 @@
 
 > Auto-AWD will auto run the payload and submit flag to platform every round
 
+## Demo
+
+[![asciicast](https://asciinema.org/a/EQ9tl0SZbvOJJEhPwv3z27e3v.svg)](https://asciinema.org/a/EQ9tl0SZbvOJJEhPwv3z27e3v)
+
 ## Getting Started
 
 ### Prerequisites
