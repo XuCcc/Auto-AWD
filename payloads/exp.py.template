@@ -10,10 +10,16 @@ import time
 
 
 class Payload(object):
-    port = 8080
-    once = True
+    port = 8080  # only send payload to challenge with this port
+    once = True  # TODO
 
     @staticmethod
-    def run(ip):
+    def run(ip: str) -> str:
+        """
+        send the payload to ``ip`` and return the text which contains flag
+
+        :param ip:
+        :return:
+        """
         time.sleep(random.randint(1, 3))
         return 'attack is success: find flag' + uuid.uuid4().hex

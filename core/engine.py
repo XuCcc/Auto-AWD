@@ -68,7 +68,7 @@ class AwdEngine(object):
             service.clear()
             self._log.debug(f'clear {name} cache')
 
-    def start(self):
+    def load(self):
         self.pipeline.start()
         self._log.info(f'{self.pipeline.name} is running')
         for name, service in self.services.items():
@@ -92,10 +92,3 @@ class AwdEngine(object):
         except KeyboardInterrupt:
             self._log.critical('exit')
             sys.exit(0)
-
-
-if __name__ == '__main__':
-    e = AwdEngine('/home/xu/Projects/Github/Auto-AWD/config.template.yml', True)
-    e.init()
-    e.start()
-    e.run()
