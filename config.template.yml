@@ -4,23 +4,39 @@ time:
   end: '23:00'
   interval: 5
 platform:
+#  submit flag by `curl` command,we will replace {flag} with value
   curl: curl  http://127.0.0.1:8000/submit?flag={flag}&token=fc067281e151a0b929f5056f22298490
+#  ------------------------------------------------------------------------------------------
+# submit flag by python script,just define the function: submit(flag)
+# example:
+#
+# import requests
+# def submit(flag: str) -> requests.Response:
+#     return requests.post(f'https://xxxx.com/flag?flag={flag}')
+#
 #  python: submit.py
+# ------------------------------------------------------------------------------------------
 #  timeout: 3
+# the success text what the platform return when submit flag successfully,we will check it
 #  success_text: ''
 attack:
+#  use the regex to search flag value after payload attacked
   regx: \w{32}
 #  dir: payloads
 #  thread: 8
 challenge:
-#  ips: 172.18.0.1~10
-#  include: 172.18.0.64
-#  exclude: 172.18.0.4
-#  port:
-#    - 8080
-#    - 9099
-  raw:
-    172.18.0.1: 8080,9099
-    172.18.0.2: 8080
-    172.18.0.3: 9099,8081
+# ----------------------------------------------------
+#  we will generate challenges with the under params
+    ips: 172.18.0.1~10
+    include: 172.18.0.64
+    exclude: 172.18.0.4
+    port:
+      - 8080
+      - 9099
+# ----------------------------------------------------
+#  Or you can input all the challenges' address
+#  raw:
+#    172.18.0.1: 8080,9099
+#    172.18.0.2: 8080
+#    172.18.0.3: 9099,8081
 
