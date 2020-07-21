@@ -11,7 +11,6 @@ from threading import Thread
 
 from core.log import Log
 from core.db import init_database
-from core.const import PayloadData
 from core.item import ItemStream
 from core.config import AppConfig
 from core.piper import FlagPiper
@@ -26,20 +25,20 @@ def schedule_run():
 
 
 class AwdEngine(object):
-    def __init__(self, path, debug=False):
-        Log.config(debug)
+    def __init__(self, path):
         self._log = Log.app
         self._config = AppConfig(path)
+        Log.config(self._config.debug)
 
         self.pipeline = Pipeline(self._config)
         self.services = {}
 
     @property
-    def isBegin(self) -> bool:
+    def is_begin(self) -> bool:
         return True if self._config.time.round > 0 else False
 
     @property
-    def pmonitor(self) -> PayloadMonitor:
+    def payload_monitor(self) -> PayloadMonitor:
         return self.services.get(PayloadMonitor.serviceName)
 
     def init(self):
@@ -49,7 +48,7 @@ class AwdEngine(object):
         self.services.update({
             PayloadMonitor.serviceName: PayloadMonitor(self._config.attack)
         })
-        self.pmonitor.loads()
+        self.payload_monitor.loads()
 
     def check(self):
         # check flag submit piper
@@ -80,7 +79,7 @@ class AwdEngine(object):
 
     def _run(self):
         while True:
-            payload = self.pmonitor.get()
+            payload = self.payload_monitor.get()
             r = self._config.time.round
             for ip, ports in self._config.challenges:
                 if payload.port in ports:

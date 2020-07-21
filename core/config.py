@@ -35,7 +35,6 @@ class TimeParser(BaseParser):
         super(TimeParser, self).__init__(data)
         self.date = time.strftime('%Y-%m-%d', time.localtime())
         self.start = TimeParser.format_time(data.get('start', '00:00'))
-        self.end = TimeParser.format_time(data.get('end', '23:59'))
         self.interval: int = data['interval']
 
     @staticmethod
@@ -50,8 +49,6 @@ class TimeParser(BaseParser):
         localtime = time.localtime()
         if time.strftime('%H:%M', localtime) < self.start:
             return 0
-        elif time.strftime('%H:%M', localtime) >= self.end:
-            return -1
         else:
             h, m = map(lambda x: int(x), self.start.split(':'))
             return ((localtime.tm_hour - h) * 60 + (localtime.tm_min - m)) // self.interval
@@ -59,9 +56,6 @@ class TimeParser(BaseParser):
     @property
     def next_round_time(self):
         r = self.round
-        if r <= 0:
-            return self.end
-
         seconds = ((r + 1) * self.interval) * 60
         start = time.mktime(time.strptime(f'{self.date} {self.start}', '%Y-%m-%d %H:%M'))
         return time.strftime('%H:%M', time.localtime(start + seconds))
@@ -152,6 +146,7 @@ class AppConfig(BaseParser):
             super(AppConfig, self).__init__(yaml.safe_load(f.read()))
 
         self.db = self.data.get('db', 'awd.db')
+        self.debug = self.data.get('debug', False)
         self.time = TimeParser(self.data.get('time'))
         self.platform = PlatformParser(self.data.get('platform'))
         self.challenges = ChallengeParser(self.data.get('challenge'))

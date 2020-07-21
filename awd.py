@@ -7,7 +7,7 @@
 from core.engine import AwdEngine
 
 if __name__ == '__main__':
-    c = AwdEngine('config.yml', True)
+    c = AwdEngine('config.yml')
     c.init()
     c.load()
     c.run()

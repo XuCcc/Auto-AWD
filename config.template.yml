@@ -1,7 +1,8 @@
 #db: awd.db
+debug: false
 time:
   start: '8:00'
-  end: '23:00'
+  # each round time(minutes)
   interval: 5
 platform:
 #  submit flag by `curl` command,we will replace {flag} with value
@@ -16,6 +17,7 @@ platform:
 #
 #  python: submit.py
 # ------------------------------------------------------------------------------------------
+# timeout when submit flag to platform
 #  timeout: 3
 # the success text what the platform return when submit flag successfully,we will check it
 #  success_text: ''

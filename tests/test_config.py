@@ -53,7 +53,3 @@ def test_next_round_time_calc(config):
     with mock.patch('core.config.TimeParser.round', new_callable=mock.PropertyMock) as m:
         m.return_value = 3
         assert config.time.next_round_time == '08:20'
-
-    with mock.patch('core.config.TimeParser.round', new_callable=mock.PropertyMock) as m:
-        m.return_value = -1
-        assert config.time.next_round_time == '23:00'

@@ -13,7 +13,6 @@ YAML = """
 # db: awd.db
 time:
   start: '8:00'
-  end: '23:00'
   interval: 5
 platform:
  curl: curl  http://127.0.0.1:8000/submit?flag={flag}&token=fc067281e151a0b929f5056f22298490

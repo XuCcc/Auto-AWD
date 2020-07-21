@@ -19,15 +19,19 @@ class LogPiper(Piper):
 
     def process(self, item: ItemStream):
         msg = ''
+        debug_infos = ''
         if (item.payload is not None) & hasattr(item, 'func'):
             if item.func.status:
                 msg = f'{item.payload.name}@{item.ip}:{item.payload.port} run {Fore.GREEN}success, {Fore.RESET}'
             else:
-                msg = f'{item.payload.name}@{item.ip}:{item.payload.port} run {Fore.RED}fail, {Fore.RESET}{item.func.message}'
+                msg = f'{item.payload.name}@{item.ip}:{item.payload.port} run {Fore.RED}fail'
+                debug_infos += item.func.message
 
         if hasattr(item, 'flag'):
             if item.flag.status:
                 msg += f'submit success {Fore.GREEN}{item.flag.value}'
             else:
-                msg += f'submit fail {Fore.RED}{item.flag.value}, {Fore.RESET}{item.flag.message}'
+                msg += f'submit fail {Fore.RED}{item.flag.value}'
+
         self._log.info(msg)
+        self._log.debug(debug_infos)
