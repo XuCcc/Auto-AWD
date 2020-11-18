@@ -92,6 +92,7 @@ class AwdEngine(object):
             payload = self.payload_monitor.get(False)
             if payload is None:
                 continue
+            self.pipeline.cancel(payload.name)
             r = self._config.time.round
             for ip, ports in self._config.challenges:
                 if payload.port in ports:

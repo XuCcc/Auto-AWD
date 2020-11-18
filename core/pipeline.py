@@ -18,7 +18,7 @@ class Pipeline(object):
     name = 'PipelineListener'
     queue = queue.Queue()
     _pipers: Dict[str, Piper] = {}
-    _tasks: List[Future] = []
+    _tasks: Dict[ItemStream, Future] = {}
 
     def __init__(self, config: AppConfig):
         self.ips = config.challenges.ips
@@ -59,9 +59,19 @@ class Pipeline(object):
 
     @classmethod
     def clear(cls):
-        cls._tasks.clear()
+        for item in list(cls._tasks.keys()):
+            if cls._tasks.get(item).cancel() or cls._tasks.get(item).done():
+                cls._tasks.pop(item)
         while not cls.queue.empty():
             cls.queue.get_nowait()
+
+    @classmethod
+    def cancel(cls, payload: str):
+        for item in list(cls._tasks.keys()):
+            if item.payload.name == payload:
+                if cls._tasks.get(item).cancel():
+                    print(item.ip, item.payload, item.func)
+                    cls._tasks.pop(item)
 
     def do(self, item: ItemStream) -> ItemStream:
         for piper in self._pipers.values():
@@ -74,8 +84,9 @@ class Pipeline(object):
                 item: ItemStream = self.queue.get(False, timeout=3)
             except queue.Empty:
                 continue
-            f = self._pool.submit(self.do, item)
-            self._tasks.append(f)
+            future = self._pool.submit(self.do, item)
+            self._tasks[item] = future
+            print(self.progress)
 
     def start(self):
         thread = Thread(
@@ -87,5 +98,6 @@ class Pipeline(object):
 
     @property
     def progress(self):
-        done = [i for i in self._tasks if i.done()]
-        return len(done), len(self._tasks)
+        running = [i for i in self._tasks.values() if i.running()]
+        done = [i for i in self._tasks.values() if i.done()]
+        return len(running), len(done), len(self._tasks)
