@@ -5,7 +5,7 @@
 # @Site    : https://xuccc.github.io/
 
 import queue
-from concurrent.futures import ThreadPoolExecutor, Future
+from concurrent.futures import ThreadPoolExecutor, Future, as_completed
 from typing import List, Dict
 from threading import Thread
 
@@ -70,7 +70,10 @@ class Pipeline(object):
 
     def run(self):
         while True:
-            item: ItemStream = self.queue.get()
+            try:
+                item: ItemStream = self.queue.get(False, timeout=3)
+            except queue.Empty:
+                continue
             f = self._pool.submit(self.do, item)
             self._tasks.append(f)
 

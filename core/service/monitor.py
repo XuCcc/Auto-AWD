@@ -32,7 +32,7 @@ class PayloadMonitor(BaseService, Observer):
             PayloadMonitor.payloadDict.update({pd.name: pd})
             PayloadMonitor.payloadQueue.put(pd)
             return pd
-        return None
+        return
 
     @property
     def status(self):
@@ -74,8 +74,11 @@ class PayloadMonitor(BaseService, Observer):
         self.schedule(PayloadMonitor.PayloadEventHandler(), self.dir, True)
 
     @classmethod
-    def get(cls) -> PayloadData:
-        return cls.payloadQueue.get()
+    def get(cls, block=True) -> PayloadData:
+        try:
+            return cls.payloadQueue.get(block, timeout=3)
+        except queue.Empty:
+            return
 
     @classmethod
     def clear(cls):

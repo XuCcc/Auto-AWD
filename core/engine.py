@@ -5,9 +5,9 @@
 # @Site    : https://xuccc.github.io/
 
 import time
-import sys
 import schedule
 from threading import Thread
+import signal
 
 from core.log import Log
 from core.db import init_database
@@ -77,17 +77,22 @@ class AwdEngine(object):
         schedule.every(self._config.time.interval).minutes.do(self.refresh).tag('refresh')
         Thread(target=schedule_run, daemon=True).start()
 
-    def _run(self):
+    def run(self):
+        def stop(signum, frame):
+            self._log.warning('exit')
+
+            import os
+
+            os._exit(1)
+
+        signal.signal(signal.SIGINT, stop)
+        signal.signal(signal.SIGTERM, stop)
+
         while True:
-            payload = self.payload_monitor.get()
+            payload = self.payload_monitor.get(False)
+            if payload is None:
+                continue
             r = self._config.time.round
             for ip, ports in self._config.challenges:
                 if payload.port in ports:
                     self.pipeline.send(ItemStream(r, ip, payload))
-
-    def run(self):
-        try:
-            self._run()
-        except KeyboardInterrupt:
-            self._log.critical('exit')
-            sys.exit(0)
