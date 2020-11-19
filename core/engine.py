@@ -92,8 +92,9 @@ class AwdEngine(object):
             payload = self.payload_monitor.get(False)
             if payload is None:
                 continue
-            self.pipeline.cancel(payload.name)
-            r = self._config.time.round
+            c = self.pipeline.cancel(payload.name)
+            r, d, a = self.pipeline.progress
+            self._log.info(f'progress: {d}/{a} running: {r} cancel: {c}')
             for ip, ports in self._config.challenges:
                 if payload.port in ports:
-                    self.pipeline.send(ItemStream(r, ip, payload))
+                    self.pipeline.send(ItemStream(self._config.time.round, ip, payload))

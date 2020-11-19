@@ -67,11 +67,13 @@ class Pipeline(object):
 
     @classmethod
     def cancel(cls, payload: str):
+        c = 0
         for item in list(cls._tasks.keys()):
             if item.payload.name == payload:
                 if cls._tasks.get(item).cancel():
-                    print(item.ip, item.payload, item.func)
                     cls._tasks.pop(item)
+                    c += 1
+        return c
 
     def do(self, item: ItemStream) -> ItemStream:
         for piper in self._pipers.values():
@@ -86,7 +88,6 @@ class Pipeline(object):
                 continue
             future = self._pool.submit(self.do, item)
             self._tasks[item] = future
-            print(self.progress)
 
     def start(self):
         thread = Thread(
@@ -98,6 +99,13 @@ class Pipeline(object):
 
     @property
     def progress(self):
-        running = [i for i in self._tasks.values() if i.running()]
-        done = [i for i in self._tasks.values() if i.done()]
-        return len(running), len(done), len(self._tasks)
+        r = 0
+        d = 0
+        a = 0
+        for i in self._tasks.values():
+            a += 1
+            if i.running():
+                r += 1
+            elif i.done():
+                d += 1
+        return r, d, a

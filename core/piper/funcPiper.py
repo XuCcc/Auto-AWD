@@ -5,8 +5,6 @@
 # @Site    : https://xuccc.github.io/
 
 import re
-import requests
-import traceback
 
 from core.config import AttackParser
 from core.const import Status
@@ -30,7 +28,6 @@ class FuncHandler(Piper):
     def process(self, item: ItemStream):
         if not item.has_func():
             return
-
         try:
             msg = item.func.run(item.ip)
         except Exception as e:
