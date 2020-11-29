@@ -22,9 +22,9 @@ class LogPiper(Piper):
         debug_infos = ''
         if (item.payload is not None) & hasattr(item, 'func'):
             if item.func.status:
-                msg = f'{item.payload.challenge} {item.payload.name}@{item.ip} run {Fore.GREEN}success, {Fore.RESET}'
+                msg = f'{item.payload.challenge} {item.payload.name}@{Fore.GREEN}{item.ip}{Fore.RESET} run success, '
             else:
-                msg = f'{item.payload.challenge} {item.payload.name}@{item.ip} run {Fore.RED}fail'
+                msg = f'{item.payload.challenge} {item.payload.name}@{Fore.RED}{item.ip}{Fore.RESET} run fail'
                 debug_infos += item.func.message
 
         if hasattr(item, 'flag'):

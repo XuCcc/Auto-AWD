@@ -6,15 +6,16 @@
 
 import time
 import schedule
-from threading import Thread
 import signal
+from threading import Thread
+from colorama import Fore
 
 from core.log import Log
 from core.db import init_database
 from core.item import ItemStream
 from core.config import AppConfig
 from core.piper import FlagPiper
-from core.pipeline import Pipeline
+from core.piper.pipeline import Pipeline
 from core.service.monitor import PayloadMonitor
 
 
@@ -94,7 +95,9 @@ class AwdEngine(object):
                 continue
             c = self.pipeline.cancel(payload.name)
             r, d, a = self.pipeline.progress
-            self._log.info(f'progress: {d}/{a} running: {r} cancel: {c}')
+            self._log.info(f'progress: {Fore.BLUE}{d}{Fore.RESET}/{a} '
+                           f'running: {Fore.YELLOW}{r}{Fore.RESET} '
+                           f'cancel: {Fore.RED}{c}{Fore.RESET}')
             for challenge, ips in self._config.challenges:
                 if challenge != payload.challenge:
                     continue

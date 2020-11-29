@@ -9,7 +9,7 @@ from unittest.mock import MagicMock
 
 from core.item import ItemStream
 from core.const import Status
-from core.pipeline import Pipeline
+from core.piper.pipeline import Pipeline
 from core.piper import FlagPiper, DbPiper
 
 

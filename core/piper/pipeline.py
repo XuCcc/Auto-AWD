@@ -5,8 +5,8 @@
 # @Site    : https://xuccc.github.io/
 
 import queue
-from concurrent.futures import ThreadPoolExecutor, Future, as_completed
-from typing import List, Dict
+from concurrent.futures import ThreadPoolExecutor, Future
+from typing import Dict
 from threading import Thread
 
 from core.config import AppConfig
