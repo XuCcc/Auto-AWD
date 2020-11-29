@@ -82,7 +82,7 @@ class PlatformParser(BaseParser):
                 raise ConfigSyntaxError(f'[platform.python] file syntax error: {e}')
 
         self.timeout: int = data.get('timeout', 3)
-        self.success_text = data.get('success_text', '')
+        self.success_text = data.get('success_text', [])
 
 
 class ChallengeParser(BaseParser):

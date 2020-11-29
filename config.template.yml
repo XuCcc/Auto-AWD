@@ -20,7 +20,9 @@ platform:
 # timeout when submit flag to platform
 #  timeout: 3
 # the success text what the platform return when submit flag successfully,we will check it
-#  success_text: ''
+  success_text:
+    - 'submit success'
+    - 'flag accepted'
 attack:
 #  use the regex to search flag value after payload attacked
   regx: \w{32}
