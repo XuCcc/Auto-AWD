@@ -20,7 +20,7 @@ class DbPiper(Piper):
                     message='' if item.func.status else item.func.message,
                     status=item.func.status,
                     name=item.payload.name,
-                    port=item.payload.port,
+                    ip=item.ip,
                 )
             if item.has_flag():
                 flaginfo = FlagInfo(

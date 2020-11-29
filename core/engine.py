@@ -95,6 +95,8 @@ class AwdEngine(object):
             c = self.pipeline.cancel(payload.name)
             r, d, a = self.pipeline.progress
             self._log.info(f'progress: {d}/{a} running: {r} cancel: {c}')
-            for ip, ports in self._config.challenges:
-                if payload.port in ports:
+            for challenge, ips in self._config.challenges:
+                if challenge != payload.challenge:
+                    continue
+                for ip in ips:
                     self.pipeline.send(ItemStream(self._config.time.round, ip, payload))

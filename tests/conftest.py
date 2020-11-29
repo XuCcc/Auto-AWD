@@ -24,16 +24,13 @@ attack:
   dir: %s
 #  thread: 8
 challenge:
-#  ips: 172.18.0.1~10
-#  include: 172.18.0.64
-#  exclude: 172.18.0.4
-#  port:
-#    - 8080
-#    - 9099
   raw:
-    172.18.0.1: 8080,9099
-    172.18.0.2: 8080
-    172.18.0.3: 9099,8081
+    easyWeb:
+      - 172.18.0.1
+      - 172.18.0.2
+    hardWeb:
+      - 172.18.1.1
+      - 172.18.1.2
 """
 
 GOOD_PAYLOAD = """
@@ -43,7 +40,7 @@ import time
 
 
 class Payload(object):
-    port = 8080
+    challenge = 'easyWeb'
     once = True
 
     @staticmethod

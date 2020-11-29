@@ -1,7 +1,7 @@
 #db: awd.db
 debug: false
 time:
-  start: '8:00'
+  start: '9:00'
   # each round time(minutes)
   interval: 5
 platform:
@@ -20,9 +20,9 @@ platform:
 # timeout when submit flag to platform
 #  timeout: 3
 # the success text what the platform return when submit flag successfully,we will check it
-  success_text:
-    - 'submit success'
-    - 'flag accepted'
+#  success_text:
+#    - 'Success'
+#    - 'Flag Accepted'
 attack:
 #  use the regex to search flag value after payload attacked
   regx: \w{32}
@@ -31,16 +31,28 @@ attack:
 challenge:
 # ----------------------------------------------------
 #  we will generate challenges with the under params
-    ips: 172.18.0.1~10
-    include: 172.18.0.64
-    exclude: 172.18.0.4
-    port:
-      - 8080
-      - 9099
+  easyWeb:
+    ips: 172.18.1.1~10
+    include: 172.18.1.8
+    exclude: 172.18.1.4
+  hardWeb:
+    ips: 172.18.2.1~10
+    include: 172.18.2.8
+    exclude: 172.18.2.4
 # ----------------------------------------------------
 #  Or you can input all the challenges' address
 #  raw:
-#    172.18.0.1: 8080,9099
-#    172.18.0.2: 8080
-#    172.18.0.3: 9099,8081
-
+#    easyWeb:
+#      - 10.0.1.8
+#      - 10.0.2.8
+#      - 10.0.3.8
+#      - 10.0.4.8
+#      - 10.0.5.8
+#      - 10.0.6.8
+#    hardWeb:
+#      - 10.0.1.9
+#      - 10.0.2.9
+#      - 10.0.3.9
+#      - 10.0.4.9
+#      - 10.0.5.9
+#      - 10.0.6.9

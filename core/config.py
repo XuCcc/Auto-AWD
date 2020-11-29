@@ -88,35 +88,19 @@ class PlatformParser(BaseParser):
 class ChallengeParser(BaseParser):
     def __init__(self, data):
         super(ChallengeParser, self).__init__(data)
-        self.raw: Dict[str, str] = data.get('raw')
+        self.challenges: Dict[str, List[str]] = {}
+        self.ips = set()
 
-        if not self.raw:
-            self.ips = ParserUtil.ip(data['ips'], data.get('include', ''), data.get('exclude', ''))
-            self.ports = data['port']
-            self.challenges: Dict[str, List[int]] = self.parse_ip_port()
+        if (raw := data.get('raw')) is not None:
+            self.challenges = raw
         else:
-            self.challenges = self.parse_raw()
-            self.ips = list(self.challenges.keys())
-            ports = set()
-            for ps in self.challenges.values():
-                for p in ps:
-                    ports.add(p)
-            self.ports = list(ports)
+            for challenge, ip_data in data.items():
+                self.challenges[challenge] = ParserUtil.ip(ip_data['ips'],
+                                                           ip_data.get('include', ''), ip_data.get('exclude', ''))
 
-    def parse_raw(self):
-        mapping = {}
-        for ip in self.raw.keys():
-            if isinstance(self.raw.get(ip), str):
-                mapping[ip] = [int(port) for port in self.raw.get(ip).split(',')]
-            elif isinstance(self.raw.get(ip), int):
-                mapping[ip] = [self.raw.get(ip)]
-        return mapping
-
-    def parse_ip_port(self):
-        mapping = {}
-        for ip in self.ips:
-            mapping[ip] = self.ports
-        return mapping
+        for ips in self.challenges.values():
+            for ip in ips:
+                self.ips.add(ip)
 
     def __iter__(self):
         return iter(self.challenges.items())

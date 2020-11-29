@@ -27,7 +27,13 @@ class FlagPiper(Piper):
             r, msg = self._parse_request_output(flag)
         if not r:
             return False, msg
-        return any([True for text in self._config.success_text if text in msg]), msg
+
+        if not self._config.success_text:
+            return True, msg
+        for text in self._config.success_text:
+            if text in msg:
+                return True, msg
+        return False, msg
 
     def _parse_shell_output(self, cmd: str) -> (bool, str):
         with subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:

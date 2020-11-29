@@ -19,7 +19,7 @@ class FuncInfo(db.Entity):
     message = Optional(str, nullable=True)
     status = Optional(bool)
     name = Required(str)
-    port = Optional(int, default=0)
+    ip = Required(str)
     flag = Optional('FlagInfo')
 
 

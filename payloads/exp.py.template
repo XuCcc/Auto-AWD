@@ -10,7 +10,7 @@ import time
 
 
 class Payload(object):
-    port = 8080  # only send payload to challenge with this port
+    challenge = 'easyWeb'  # only send payload to challenge with this challenge
     once = True  # TODO
 
     @staticmethod

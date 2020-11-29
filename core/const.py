@@ -20,7 +20,7 @@ class Status(IntEnum):
 class PayloadData(object):
     def __init__(self, filename, cls):
         self.name = filename
-        self.port = cls.port
+        self.challenge = cls.challenge
         self.func = cls.run
         self.once = cls.once
 
@@ -31,4 +31,4 @@ class PayloadData(object):
         return PayloadData(filename, payload.Payload)
 
     def __str__(self):
-        return f'{self.name} {self.port}'
+        return f'{self.name} {self.challenge}'
