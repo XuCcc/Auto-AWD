@@ -54,7 +54,8 @@ class Payload(object):
 def config(tmpdir):
     c = tmpdir.join('config.yml')
     c.write(YAML % tmpdir)
-    return AppConfig(c)
+    AppConfig().load(c)
+    return AppConfig()
 
 
 @pytest.fixture()

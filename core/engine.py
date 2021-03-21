@@ -27,8 +27,9 @@ def schedule_run():
 
 class AwdEngine(object):
     def __init__(self, path):
+        AppConfig().load(path)
         self._log = Log.app
-        self._config = AppConfig(path)
+        self._config = AppConfig()
         Log.config(self._config.debug)
 
         self.pipeline = Pipeline(self._config)

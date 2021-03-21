@@ -11,7 +11,7 @@ import re
 import os
 import time
 
-from core.utils import loadPy
+from core.utils import load_py_script, SingletonType
 from core.exception import ConfigSyntaxError, ConfigFileError
 
 
@@ -75,7 +75,8 @@ class PlatformParser(BaseParser):
         elif 'python' in data:
             self.isCurl = False
             try:
-                self.py: Callable[[str], requests.Response] = loadPy('awd.core.submit', data.get('python')).submit
+                self.py: Callable[[str], requests.Response] = load_py_script('awd.core.submit',
+                                                                             data.get('python')).submit
             except AttributeError:
                 raise ConfigFileError(f'[platform.python] miss function: submit(flag)')
             except SyntaxError as e:
@@ -122,12 +123,21 @@ class PluginParser(BaseParser):
         self.plugins = data
 
 
-class AppConfig(BaseParser):
-    def __init__(self, config: str):
+class AppConfig(metaclass=SingletonType):
+    data: dict
+    db: str
+    debug: bool
+    time: TimeParser
+    platform: PlatformParser
+    challenges: ChallengeParser
+    plugins: PluginParser
+    attack: AttackParser
+
+    def load(self, config: str):
         if not os.path.exists(config):
             raise ConfigFileError(f'config file {config} not find')
         with open(config, 'r') as f:
-            super(AppConfig, self).__init__(yaml.safe_load(f.read()))
+            self.data = yaml.safe_load(f.read())
 
         self.db = self.data.get('db', 'awd.db')
         self.debug = self.data.get('debug', False)

@@ -7,7 +7,7 @@
 import os
 from enum import IntEnum
 
-from core.utils import loadPy
+from core.utils import load_py_script
 
 
 class Status(IntEnum):
@@ -27,7 +27,7 @@ class PayloadData(object):
     @staticmethod
     def load(path):
         filename = os.path.basename(path)
-        payload = loadPy('awd.core.payload', path)
+        payload = load_py_script('awd.core.payload', path)
         return PayloadData(filename, payload.Payload)
 
     def __str__(self):

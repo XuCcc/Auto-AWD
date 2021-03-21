@@ -8,9 +8,10 @@ import abc
 from threading import Thread
 
 from core.log import Log
+from core.utils import SingletonType
 
 
-class BaseService(Thread):
+class BaseService(Thread, metaclass=SingletonType):
     serviceName = 'BaseService'
     log = Log.app
 
