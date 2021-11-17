@@ -36,6 +36,9 @@ class FuncHandler(Piper):
             if not item.payload.flag:
                 item.func.result = (Status.SUCCESS, msg) if result else (Status.FAIL, msg)
                 return
+            if not result:
+                item.func.result = (Status.FAIL, msg)
+                return
             result, flag = self.find_flag(msg)
             if not result:
                 item.func.result = (Status.FAIL, msg)

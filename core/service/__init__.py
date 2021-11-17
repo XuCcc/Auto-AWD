@@ -17,5 +17,9 @@ class BaseService(Thread, metaclass=SingletonType):
 
     @property
     @abc.abstractmethod
-    def status(self):
+    def status(self) -> str:
         return ''
+
+    @abc.abstractmethod
+    def clear(self):
+        pass

@@ -10,12 +10,14 @@ import signal
 from threading import Thread
 from colorama import Fore
 
+from typing import Dict
 from core.log import Log
 from core.db import init_database
 from core.item import ItemStream
 from core.config import AppConfig
 from core.piper import FlagPiper
 from core.piper.pipeline import Pipeline
+from core.service import BaseService
 from core.service.monitor import PayloadMonitor
 
 
@@ -33,7 +35,7 @@ class AwdEngine(object):
         Log.config(self._config.debug)
 
         self.pipeline = Pipeline(self._config)
-        self.services = {}
+        self.services: Dict[str, BaseService] = {}
 
     @property
     def is_begin(self) -> bool:
@@ -62,6 +64,8 @@ class AwdEngine(object):
             self._log.warning('[platform.success_text] is empty when submit flag successful')
 
     def refresh(self):
+        for name, service in self.services.items():
+            self._log.info(f'[{name}]: {service.status}')
         # do some jobs every round
         self._log.debug('clear queue in pipeline')
         self.pipeline.clear()
