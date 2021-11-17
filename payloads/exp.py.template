@@ -10,11 +10,11 @@ import time
 
 
 class Payload(object):
-    challenge = 'easyWeb'  # only send payload to challenge with this challenge
-    once = True  # TODO
+    challenge = 'easyWeb'  #: only send payload to challenge with this challenge
+    flag = True  #: find flag from return msg
 
     @staticmethod
-    def run(ip: str) -> str:
+    def run(ip: str) -> (bool, str):
         """
         send the payload to ``ip`` and return the text which contains flag
 
@@ -22,4 +22,4 @@ class Payload(object):
         :return:
         """
         time.sleep(random.randint(1, 3))
-        return 'attack is success: find flag' + uuid.uuid4().hex
+        return True, 'attack is success: find flag' + uuid.uuid4().hex

@@ -33,7 +33,7 @@ challenge:
       - 172.18.1.2
 """
 
-GOOD_PAYLOAD = """
+FIND_FLAG_PAYLOAD = """
 import uuid
 import random
 import time
@@ -41,12 +41,30 @@ import time
 
 class Payload(object):
     challenge = 'easyWeb'
-    once = True
+    flag = True
 
     @staticmethod
     def run(ip):
         time.sleep(random.randint(1, 3))
-        return 'flag is here: ' + uuid.uuid4().hex
+        return True, 'flag is here: ' + uuid.uuid4().hex
+"""
+
+ONLY_RUN_PAYLOAD = """
+import uuid
+import random
+import time
+
+
+class Payload(object):
+    challenge = 'hardWeb'
+    flag = False
+
+    @staticmethod
+    def run(ip):
+        time.sleep(random.randint(1, 3))
+        return True, 'attack success'
+
+
 """
 
 
@@ -59,7 +77,14 @@ def config(tmpdir):
 
 
 @pytest.fixture()
-def payload(tmpdir, config):
-    p = tmpdir.join('good.py')
-    p.write(GOOD_PAYLOAD)
+def find_flag_payload(tmpdir, config):
+    p = tmpdir.join('find_flag.py')
+    p.write(FIND_FLAG_PAYLOAD)
+    return PayloadData.load(p)
+
+
+@pytest.fixture()
+def only_run_payload(tmpdir, config):
+    p = tmpdir.join('only_run.py')
+    p.write(ONLY_RUN_PAYLOAD)
     return PayloadData.load(p)

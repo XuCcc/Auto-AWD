@@ -32,7 +32,7 @@ class FuncItem(Item):
         super(FuncItem, self).__init__()
         self.func = func
 
-    def run(self, ip) -> str:
+    def run(self, ip) -> (bool, str):
         return self.func(ip)
 
 

@@ -21,36 +21,43 @@ def pipeline(config):
     return p
 
 
-def test_item_process_good_func_find_flag_submit_fail(pipeline, payload):
-    item = pipeline.do(ItemStream(1, payload=payload))
+def test_item_process_good_func_find_flag_submit_fail(pipeline, find_flag_payload):
+    item = pipeline.do(ItemStream(1, payload=find_flag_payload))
     assert item.has_func()
     assert item.has_flag()
     assert item.func.status
     assert not item.flag.status
 
 
-def test_item_process_good_func_find_no_flag(pipeline, payload):
-    payload.func = MagicMock(return_value='1')
-    item = pipeline.do(ItemStream(1, payload=payload))
+def test_item_process_good_func_find_no_flag(pipeline, find_flag_payload):
+    find_flag_payload.func = MagicMock(return_value=(True, 'not flag'))
+    item = pipeline.do(ItemStream(1, payload=find_flag_payload))
     assert item.has_func()
     assert not item.func.status
     assert item.func._status == Status.FAIL
-    assert item.func.message == '1'
+    assert item.func.message == 'not flag'
     assert not item.has_flag()
 
 
-def test_item_process_bad_func(pipeline, payload):
-    payload.func = MagicMock(side_effect=KeyError)
-    item = pipeline.do(ItemStream(1, payload=payload))
+def test_item_process_bad_func(pipeline, find_flag_payload):
+    find_flag_payload.func = MagicMock(side_effect=KeyError)
+    item = pipeline.do(ItemStream(1, payload=find_flag_payload))
     assert item.has_func()
     assert item.func._status == Status.ERROR
     assert not item.func.status
     assert not item.has_flag()
 
 
-def test_item_process_good_func_submit_success(config, pipeline, payload):
+def test_item_process_good_func_submit_success(config, pipeline, find_flag_payload):
     config.platform.success_text = ['submit ok']
     FlagPiper._parse_shell_output = MagicMock(return_value=(True, "{'result':'submit ok'}"))
-    item = pipeline.do(ItemStream(1, payload=payload))
+    item = pipeline.do(ItemStream(1, payload=find_flag_payload))
     assert item.has_flag()
     assert item.flag.status
+
+
+def test_item_process_only_run(pipeline, only_run_payload):
+    item = pipeline.do(ItemStream(1, payload=only_run_payload))
+    assert item.has_func()
+    assert item.func.status
+    assert not hasattr(item, 'flag')

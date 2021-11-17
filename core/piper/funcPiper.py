@@ -29,13 +29,16 @@ class FuncHandler(Piper):
         if not item.has_func():
             return
         try:
-            msg = item.func.run(item.ip)
+            result, msg = item.func.run(item.ip)
         except Exception as e:
             item.func.result = (Status.ERROR, str(e))
         else:
-            r, flag = self.find_flag(msg)
-            if r:
-                item.func.result = (Status.SUCCESS, msg)
-                item.set_flag(flag)
-            else:
+            if not item.payload.flag:
+                item.func.result = (Status.SUCCESS, msg) if result else (Status.FAIL, msg)
+                return
+            result, flag = self.find_flag(msg)
+            if not result:
                 item.func.result = (Status.FAIL, msg)
+                return
+            item.func.result = (Status.SUCCESS, msg)
+            item.set_flag(flag)

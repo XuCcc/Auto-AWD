@@ -22,7 +22,7 @@ class PayloadData(object):
         self.name = filename
         self.challenge = cls.challenge
         self.func = cls.run
-        self.once = cls.once
+        self.flag = cls.flag
 
     @staticmethod
     def load(path):
