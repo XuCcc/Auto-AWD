@@ -12,7 +12,7 @@ from watchdog.events import FileSystemEventHandler, FileSystemEvent
 
 from core.service import BaseService
 from core.config import AttackParser
-from core.const import PayloadData
+from core.data import Payload
 
 
 class PayloadMonitor(BaseService, Observer):
@@ -21,9 +21,9 @@ class PayloadMonitor(BaseService, Observer):
     payloadDict = {}
 
     @classmethod
-    def load_payload(cls, path) -> PayloadData:
+    def load_payload(cls, path) -> Payload:
         try:
-            pd = PayloadData.load(path)
+            pd = Payload.load(path)
         except AttributeError as e:
             PayloadMonitor.log.warning(f'{path} missing attribute: {str(e).split(" ")[-1]}')
         except Exception as e:
@@ -74,7 +74,7 @@ class PayloadMonitor(BaseService, Observer):
         self.schedule(PayloadMonitor.PayloadEventHandler(), self.dir, True)
 
     @classmethod
-    def get(cls, block=True) -> PayloadData:
+    def get(cls, block=True) -> Payload:
         try:
             return cls.payloadQueue.get(block, timeout=3)
         except queue.Empty:

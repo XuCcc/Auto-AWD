@@ -7,7 +7,7 @@
 import re
 
 from core.config import AttackParser
-from core.const import Status
+from core.data import Status
 from core.item import ItemStream
 from core.piper.basePiper import Piper
 

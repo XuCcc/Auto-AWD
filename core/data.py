@@ -17,7 +17,7 @@ class Status(IntEnum):
     TBD = 0
 
 
-class PayloadData(object):
+class Payload(object):
     def __init__(self, filename, cls):
         self.name = filename
         self.challenge = cls.challenge
@@ -28,7 +28,7 @@ class PayloadData(object):
     def load(path):
         filename = os.path.basename(path)
         payload = load_py_script('awd.core.payload', path)
-        return PayloadData(filename, payload.Payload)
+        return Payload(filename, payload.Payload)
 
     def __str__(self):
         return f'{self.name} {self.challenge}'

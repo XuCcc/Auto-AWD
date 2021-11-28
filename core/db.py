@@ -27,6 +27,7 @@ class FlagInfo(db.Entity):
     id = PrimaryKey(int, auto=True)
     round = Required(int)
     value = Required(str, unique=True)
+    challenge = Optional(str)
     status = Optional(bool)
     message = Optional(str)
     func = Optional(FuncInfo)

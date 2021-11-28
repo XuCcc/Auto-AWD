@@ -6,7 +6,7 @@
 
 from typing import Callable, Tuple
 
-from core.const import Status, PayloadData
+from core.data import Status, Payload
 
 
 class Item(object):
@@ -46,13 +46,16 @@ class ItemStream(Item):
     flag: FlagItem
     func: FuncItem
 
-    def __init__(self, r: int, ip='127.0.0.1', payload: PayloadData = None):
+    def __init__(self, r: int, ip='127.0.0.1', payload: Payload = None, challenge: str = None):
         super(ItemStream, self).__init__()
         self.round = r
         self.ip = ip
         self.payload = payload
         if payload is not None:
             self.set_func(payload.func)
+            self.challenge = payload.challenge
+        else:
+            self.challenge = challenge or ''
 
     def set_flag(self, value):
         self.flag = FlagItem(value)

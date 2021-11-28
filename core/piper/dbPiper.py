@@ -27,7 +27,8 @@ class DbPiper(Piper):
                     round=item.round,
                     value=item.flag.value,
                     status=item.flag.status,
-                    message='' if item.flag.status else item.flag.message
+                    message='' if item.flag.status else item.flag.message,
+                    challenge=item.challenge
                 )
             if item.has_func() & item.has_flag():
                 funcinfo.flag = flaginfo

@@ -7,7 +7,7 @@
 import pytest
 
 from core.config import AppConfig
-from core.const import PayloadData
+from core.data import Payload
 
 YAML = """
 # db: awd.db
@@ -80,11 +80,11 @@ def config(tmpdir):
 def find_flag_payload(tmpdir, config):
     p = tmpdir.join('find_flag.py')
     p.write(FIND_FLAG_PAYLOAD)
-    return PayloadData.load(p)
+    return Payload.load(p)
 
 
 @pytest.fixture()
 def only_run_payload(tmpdir, config):
     p = tmpdir.join('only_run.py')
     p.write(ONLY_RUN_PAYLOAD)
-    return PayloadData.load(p)
+    return Payload.load(p)

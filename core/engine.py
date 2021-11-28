@@ -50,7 +50,7 @@ class AwdEngine(object):
         self.pipeline.build()
 
         self.services.update({
-            PayloadMonitor.serviceName: PayloadMonitor(self._config.attack)
+            PayloadMonitor.serviceName: PayloadMonitor(self._config.attack),
         })
         self.payload_monitor.loads()
 
@@ -107,4 +107,4 @@ class AwdEngine(object):
                 if challenge != payload.challenge:
                     continue
                 for ip in ips:
-                    self.pipeline.send(ItemStream(self._config.time.round, ip, payload))
+                    self.pipeline.send(ItemStream(self._config.time.round, ip, payload=payload))
