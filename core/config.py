@@ -84,6 +84,7 @@ class PlatformParser(BaseParser):
 
         self.timeout: int = data.get('timeout', 3)
         self.success_text = data.get('success_text', [])
+        self.interval: int = data.get('interval', 0)
 
 
 class ChallengeParser(BaseParser):

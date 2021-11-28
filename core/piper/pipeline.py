@@ -5,9 +5,10 @@
 # @Site    : https://xuccc.github.io/
 
 import queue
+import time
 from concurrent.futures import ThreadPoolExecutor, Future
-from typing import Dict
 from threading import Thread
+from typing import Dict
 
 from core.config import AppConfig
 from core.item import ItemStream
@@ -88,6 +89,9 @@ class Pipeline(object):
                 continue
             future = self._pool.submit(self.do, item)
             self._tasks[item] = future
+
+            if self._config.platform.interval:
+                time.sleep(self._config.platform.interval / 1000)
 
     def start(self):
         thread = Thread(

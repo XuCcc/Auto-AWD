@@ -7,6 +7,8 @@ time:
 platform:
 #  submit flag by `curl` command,we will replace {flag} with value
   curl: curl  http://127.0.0.1:8000/submit?flag={flag}&token=fc067281e151a0b929f5056f22298490
+#  submit flag interval(milliseconds)
+#  interval: 500
 #  ------------------------------------------------------------------------------------------
 # submit flag by python script,just define the function: submit(flag)
 # example:
