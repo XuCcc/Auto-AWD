@@ -33,7 +33,7 @@ class Pipeline(object):
         ).add(
             FlagPiper(self._config.platform)
         ).add(
-            LogPiper()
+            LogPiper(self._config.debug)
         ).add(
             DbPiper()
         )
