@@ -19,7 +19,7 @@
 
 ## Demo
 
-[![asciicast](https://asciinema.org/a/EQ9tl0SZbvOJJEhPwv3z27e3v.svg)](https://asciinema.org/a/EQ9tl0SZbvOJJEhPwv3z27e3v)
+[![asciicast](https://asciinema.org/a/451995.svg)](https://asciinema.org/a/451995)
 
 ## Getting Started
 
