@@ -20,6 +20,7 @@ class FlagPiper(Piper):
     def __init__(self, config: PlatformParser):
         self._config = config
 
+    # TODO: retry when timeout/50x
     def submit_flag(self, flag) -> (bool, str):
         if self._config.isCurl:
             r, msg = self._parse_shell_output(self._config.curl.format(flag=flag))

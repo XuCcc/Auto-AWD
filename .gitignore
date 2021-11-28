@@ -134,8 +134,8 @@ payloads/*.py
 # idea
 .idea
 
-Pipfile.lock
-
 # db
 *.db
 *.db-journal
+
+poetry.lock

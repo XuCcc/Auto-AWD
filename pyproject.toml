@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "auto-awd"
+version = "0.1.0"
+description = "Auto-AWD will auto run the payload and submit flag to platform every round"
+authors = ["XuPlus"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+PyYAML = "^6.0"
+requests = "^2.26.0"
+loguru = "^0.5.3"
+colorama = "^0.4.4"
+watchdog = "^2.1.6"
+pony = "^0.7.14"
+schedule = "^1.1.0"
+click = "^8.0.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
